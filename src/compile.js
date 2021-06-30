@@ -277,13 +277,23 @@ function handle_value(template, key, value){
 
         is_static = false;
 
-        const tmp = value.replace(/{{==/g, "{{")
-                         .replace(/{{=/g, "{{")
-                         .replace(/"{{/g, "")
-                         .replace(/}}"/g, "")
-                         .replace(/{{/g, "' + ")
-                         .replace(/}}/g, " + '");
+        var tmp = value.replace(/{{==/g, "{{")
+                       .replace(/{{=/g, "{{")
+                       .replace(/"{{/g, "")
+                       .replace(/}}"/g, "");
 
+        // Put parens around the expression, but not for bind or proxy values
+        // which are always just a single value.
+        if (bind || proxy) {
+
+            tmp = tmp.replace(/{{/g, "' + ")
+                     .replace(/}}/g, " + '");
+        } else {
+
+            tmp = tmp.replace(/{{/g, "' + (")
+                     .replace(/}}/g, ") + '");
+        }
+        
         template[key] = [("'" + tmp + "'").replace(/'' \+ /g, "")
                                           .replace(/ \+ ''/g, "")
                                           .trim()];

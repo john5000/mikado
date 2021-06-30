@@ -2608,6 +2608,33 @@
         });
     });
 
+    describe("Additions", function(){
+
+        it("Should have rendered conditional style properly (fixes issue 41)", function(){
+
+
+            var template = Mikado.compile(
+                `<section root data-id="{{data.id}}" >
+                    <div style="padding-right: 10px; color: {{data.flag?'red':'blue'}};" >
+                        <div class="title" click="delegate:root">{{data.title}}</div>
+                        <div class="content" click="delegate:foo">{{data.content}}</div>
+                        <div class="footer">{{data.footer}}</div>
+                    </div>
+                </section>`
+            );
+
+            mikado = new Mikado(root_1, template, { store: true, loose: true });
+
+            data[0].flag = 1;
+            data[1].flag = 0;
+            mikado.clear().render(data);
+
+            expect(mikado.dom[10].dataset.id).to.equal(data[10].id);
+            expect(mikado.dom[0].children[0].style.color).to.equal('red');
+            expect(mikado.dom[1].children[0].style.color).to.equal('blue');
+        });
+    });
+
     function validate(node, data){
 
         var dataset = node.dataset;

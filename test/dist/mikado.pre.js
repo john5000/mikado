@@ -1114,7 +1114,8 @@ function Y(a, b, c) {
   if (-1 !== c.indexOf("{{") && -1 !== c.indexOf("}}")) {
     var d = -1 !== c.indexOf("{{=="), e = d || -1 !== c.indexOf("{{=");
     Ba = !1;
-    c = c.replace(/{{==/g, "{{").replace(/{{=/g, "{{").replace(/"{{/g, "").replace(/}}"/g, "").replace(/{{/g, "' + ").replace(/}}/g, " + '");
+    c = c.replace(/{{==/g, "{{").replace(/{{=/g, "{{").replace(/"{{/g, "").replace(/}}"/g, "");
+    c = d || e ? c.replace(/{{/g, "' + ").replace(/}}/g, " + '") : c.replace(/{{/g, "' + (").replace(/}}/g, ") + '");
     a[b] = [("'" + c + "'").replace(/'' \+ /g, "").replace(/ \+ ''/g, "").trim()];
     d ? a[b].push(2) : e && a[b].push(1);
   } else {
